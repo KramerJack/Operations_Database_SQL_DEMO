@@ -1,0 +1,26 @@
+--Find Past due Accounts
+
+with y as (
+with x as (
+select dd.date_id, acct.account_id, app.stage_name, acct.outstanding_balance, acct.payback_status, acct.payback_plan,
+de.qualified, de.offer_amount::money, de.offer_interest_rate, de.term,
+dd.date_app_closed_accepted, (dd.date_app_closed_accepted + (de.term*30)) as apprx_payback_date,
+((current_date - dd.date_app_closed_accepted + (de.term*30)) / 100) as days_past_due -- dividing by 100 to keep time frame resonable for case when statements
+from date_dim as dd 
+left join account_dim as acct on dd.date_id = acct.date_id
+left join decision_dim as de on dd.date_id = de.date_id
+left join application_dim as app on dd.date_id = app.date_id
+where dd.date_app_closed_accepted is not NULL
+)
+select *, 
+Case when days_past_due <= 0 then 'No Pass Due'
+when days_past_due between 1 and 10 then 'Recently Passed Due'
+when days_past_due between 10 and 25 then 'Passed Due'
+when days_past_due > 25 then 'Collection Begin'
+end as delinquency 
+from x
+)
+
+select * 
+from y 
+where y.delinquency ilike 'Collection Begin';

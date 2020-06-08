@@ -1,0 +1,762 @@
+--START DATABASE AND TABLE SET UP
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+
+--END DATABASE AND TABLE SET UP
+
+--START DROP TABLE IF EXISTS
+
+DROP TABLE IF EXISTS account_dim;
+DROP TABLE IF EXISTS application_dim;
+DROP TABLE IF EXISTS credit_dim;
+DROP TABLE IF EXISTS date_dim;
+DROP TABLE IF EXISTS decision_dim;
+
+--END DROP TABLE IF EXISTS
+
+--START TABLE CREATION
+
+--Create account dim
+
+create table account_dim(
+    account_id int not NULL,
+    date_id int not NULL,
+    application_id int not NULL,
+    outstanding_balance int,
+    total_payback_amt int,
+    payback_status character varying(20),
+    payback_plan character varying(20)	
+);
+
+--Create application dim
+
+create table application_dim(
+    application_id int not NULL,
+    date_id int not NULL,
+    account_id int not NULL,
+    stage_name character varying(50),
+    business_name character varying(50),
+    business_address character varying(50),
+    business_city character varying(50),
+    business_state character varying(50),
+    business_zip int,
+    business_country character varying(50),
+    inception_date date,
+    annual_revenue int,
+    owner_1_name character varying(50),
+    owner_1_address character varying(50),
+    owner_1_city character varying(50),
+    owner_1_state character varying(50),
+    owner_1_zip int,
+    owner_1_country character varying(50),
+    owner_1_dob date,
+    owner_1_ssn int,
+    owner_1_ownership_percent int,
+    owner_2_name character varying(50),
+    owner_2_address character varying(50),
+    owner_2_city character varying(50),
+    owner_2_state character varying(50),
+    owner_2_zip int,
+    owner_2_country character varying(50),
+    owner_2_dob date,
+    owner_2_ssn int,
+    owner_2_ownership_percent int
+);
+
+--create date dim
+
+create table date_dim(
+    date_id int not NULL,
+    date_acct_created date,
+    date_app_created date,
+    date_app_received date,
+    date_app_missing_info date,
+    date_app_decisioned date,
+    date_app_closed_accepted date,
+    date_app_closed_declined date,
+    date_app_closed_expired date,
+    expected_payback_date date
+);
+
+--create decision_dim
+
+create table decision_dim(
+   decision_id int not NULL,
+   date_id int not NULL,
+   application_id int not NULL,
+   qualified character varying(50),
+   offer_amount int,
+   offer_interest_rate int,
+   term int,
+   offer_status character varying(50)
+);
+
+--create credit_dim
+
+create table credit_dim(
+    credit_review_id int not NULL,
+    date_id int not NULL,
+    application_id int not NULL,
+    business_score int,
+    owner_1_score int,
+    owner_1_reason_1 int,
+    owner_1_reason_2 int,
+    owner_1_reason_3 int,
+    owner_1_reason_4 int,
+    owner_2_score int,
+    owner_2_reason_1 int,
+    owner_2_reason_2 int,
+    owner_2_reason_3 int,
+    owner_2_reason_4 int,
+    blended_score int
+);
+
+--END TABLE CREATION
+
+--INSERT DATA START
+
+--start account_dim
+
+insert into account_dim values (473667,128486,555053,NULL,NULL,NULL,NULL);
+insert into account_dim values (437373,122469,583552,NULL,NULL,NULL,NULL);
+insert into account_dim values (451357,170869,508928,NULL,NULL,NULL,NULL);
+insert into account_dim values (422621,123598,557413,NULL,NULL,NULL,NULL);
+insert into account_dim values (484342,181964,534929,NULL,NULL,NULL,NULL);
+insert into account_dim values (405861,179829,510653,NULL,NULL,NULL,NULL);
+insert into account_dim values (480717,151512,500794,15095,55804.76,'in progress-flagged','yes');
+insert into account_dim values (452946,147683,545929,49478,281845.62,'in progress','no');
+insert into account_dim values (424737,193895,537473,NULL,NULL,NULL,NULL);
+insert into account_dim values (494425,157426,561385,NULL,NULL,NULL,NULL);
+insert into account_dim values (482824,111092,560028,NULL,NULL,NULL,NULL);
+insert into account_dim values (423891,196454,506059,NULL,NULL,NULL,NULL);
+insert into account_dim values (491985,149194,515329,NULL,NULL,NULL,NULL);
+insert into account_dim values (441488,197522,559800,NULL,NULL,NULL,NULL);
+insert into account_dim values (440380,147162,503132,NULL,NULL,NULL,NULL);
+insert into account_dim values (411603,110405,522396,NULL,NULL,NULL,NULL);
+insert into account_dim values (437399,193650,578666,NULL,NULL,NULL,NULL);
+insert into account_dim values (415180,152092,558025,NULL,NULL,NULL,NULL);
+insert into account_dim values (464955,120789,560377,NULL,NULL,NULL,NULL);
+insert into account_dim values (487813,116327,562006,NULL,NULL,NULL,NULL);
+insert into account_dim values (417095,145245,562666,NULL,NULL,NULL,NULL);
+insert into account_dim values (439899,161320,533992,NULL,NULL,NULL,NULL);
+insert into account_dim values (495187,182374,585078,0,186749.2,'paid back','yes');
+insert into account_dim values (427102,146686,500025,27877,161391.12,'in progress','no');
+insert into account_dim values (455349,191093,538823,NULL,NULL,NULL,NULL);
+insert into account_dim values (452911,158872,570219,NULL,NULL,NULL,NULL);
+insert into account_dim values (474009,126428,519106,22098,153129.6,'in progress','no');
+insert into account_dim values (476527,123608,556927,NULL,NULL,NULL,NULL);
+insert into account_dim values (401554,184355,551031,NULL,NULL,NULL,NULL);
+insert into account_dim values (411695,144132,512262,NULL,NULL,NULL,NULL);
+insert into account_dim values (424822,109854,597550,87430,111677.4,'paid back','no');
+insert into account_dim values (490417,141289,545603,NULL,NULL,NULL,NULL);
+insert into account_dim values (470796,105314,537246,NULL,NULL,NULL,NULL);
+insert into account_dim values (410499,136762,589618,0,183403.32,'in progress','no');
+insert into account_dim values (457493,191215,568822,NULL,NULL,NULL,NULL);
+insert into account_dim values (432040,160972,562593,NULL,NULL,NULL,NULL);
+insert into account_dim values (482876,125096,533739,NULL,NULL,NULL,NULL);
+insert into account_dim values (478518,160461,510371,NULL,NULL,NULL,NULL);
+insert into account_dim values (406937,155265,583032,NULL,NULL,NULL,NULL);
+insert into account_dim values (402264,189045,513932,NULL,NULL,NULL,NULL);
+insert into account_dim values (447517,191095,509689,NULL,NULL,NULL,NULL);
+insert into account_dim values (490343,173137,529653,NULL,NULL,NULL,NULL);
+insert into account_dim values (476473,123577,540040,170685,195146.89,'in progress-flagged','yes');
+insert into account_dim values (480882,165306,554685,NULL,NULL,NULL,NULL);
+insert into account_dim values (441373,115850,570921,NULL,NULL,NULL,NULL);
+insert into account_dim values (437943,180507,550691,43572,137610.27,'in progress','no');
+insert into account_dim values (455183,181605,592171,185184,247929,'in progress','no');
+insert into account_dim values (474145,176650,568815,NULL,NULL,NULL,NULL);
+insert into account_dim values (454258,185994,537991,NULL,NULL,NULL,NULL);
+insert into account_dim values (473455,145248,527598,NULL,NULL,NULL,NULL);
+insert into account_dim values (480465,137689,593679,NULL,NULL,NULL,NULL);
+insert into account_dim values (482351,178766,542234,NULL,NULL,NULL,NULL);
+insert into account_dim values (411019,110745,538493,NULL,NULL,NULL,NULL);
+insert into account_dim values (494469,124259,537091,NULL,NULL,NULL,NULL);
+insert into account_dim values (479235,141666,528013,NULL,NULL,NULL,NULL);
+insert into account_dim values (450737,179597,588711,NULL,NULL,NULL,NULL);
+insert into account_dim values (478808,121931,553511,NULL,NULL,NULL,NULL);
+insert into account_dim values (421267,193485,517037,NULL,NULL,NULL,NULL);
+insert into account_dim values (459168,180927,519039,NULL,NULL,NULL,NULL);
+insert into account_dim values (499929,137523,569553,0,116736,'paid back','no');
+insert into account_dim values (433355,141789,593214,NULL,NULL,NULL,NULL);
+insert into account_dim values (431875,170928,509292,NULL,NULL,NULL,NULL);
+insert into account_dim values (458039,120804,514610,NULL,NULL,NULL,NULL);
+insert into account_dim values (484668,164161,560575,NULL,NULL,NULL,NULL);
+insert into account_dim values (447103,178434,585637,NULL,NULL,NULL,NULL);
+insert into account_dim values (424141,147610,540939,130709,313038.4,'in progress','yes');
+insert into account_dim values (497458,163493,574555,NULL,NULL,NULL,NULL);
+insert into account_dim values (478782,136365,541993,NULL,NULL,NULL,NULL);
+insert into account_dim values (498740,134841,507448,NULL,NULL,NULL,NULL);
+insert into account_dim values (483803,167758,591633,NULL,NULL,NULL,NULL);
+insert into account_dim values (466287,194103,588845,NULL,NULL,NULL,NULL);
+insert into account_dim values (498780,152476,561761,NULL,NULL,NULL,NULL);
+insert into account_dim values (419936,114037,536609,NULL,NULL,NULL,NULL);
+insert into account_dim values (440627,191029,597183,NULL,NULL,NULL,NULL);
+insert into account_dim values (407184,165555,565335,NULL,NULL,NULL,NULL);
+insert into account_dim values (408392,136686,580348,NULL,NULL,NULL,NULL);
+insert into account_dim values (450280,118688,528551,NULL,NULL,NULL,NULL);
+insert into account_dim values (495740,134203,552717,NULL,NULL,NULL,NULL);
+insert into account_dim values (416531,106618,576158,NULL,NULL,NULL,NULL);
+insert into account_dim values (416609,196720,539497,0,180342.35,'paid back','no');
+insert into account_dim values (473202,188698,518305,NULL,NULL,NULL,NULL);
+insert into account_dim values (455241,123729,579302,NULL,NULL,NULL,NULL);
+insert into account_dim values (497874,147151,532207,26945,24096.96,'in progress','yes');
+insert into account_dim values (465189,180055,550996,84414,173671.68,'in progress','no');
+insert into account_dim values (463783,160323,561681,14257,183646.94,'in progress','yes');
+insert into account_dim values (438034,185121,535363,NULL,NULL,NULL,NULL);
+insert into account_dim values (412829,114766,516338,32204,139336.91,'in progress','yes');
+insert into account_dim values (457409,146887,539625,NULL,NULL,NULL,NULL);
+insert into account_dim values (483164,158621,573064,NULL,NULL,NULL,NULL);
+insert into account_dim values (429414,161291,508371,NULL,NULL,NULL,NULL);
+insert into account_dim values (441005,160121,545839,NULL,NULL,NULL,NULL);
+insert into account_dim values (435233,133380,500197,NULL,NULL,NULL,NULL);
+insert into account_dim values (419619,120103,515094,NULL,NULL,NULL,NULL);
+insert into account_dim values (467922,194164,550067,NULL,NULL,NULL,NULL);
+insert into account_dim values (448368,107441,505986,111663,143467.5,'in progress-flagged','yes');
+insert into account_dim values (441338,149280,511109,NULL,NULL,NULL,NULL);
+insert into account_dim values (447665,186099,571881,NULL,NULL,NULL,NULL);
+insert into account_dim values (490912,106553,521095,123399,189503.6,'in progress','no');
+insert into account_dim values (480106,146515,516948,NULL,NULL,NULL,NULL);
+insert into account_dim values (489263,161630,508824,108133,29169.27,'in progress','yes');
+
+--end account_dim
+
+--start application_dim
+
+insert into application_dim values (555053,128486,473667,'app expired','3com corp','777 brockton avenue','abington','ma',23510,'us','2014-05-27',8445343,'liam smith','255 w main st','avon','ct',60010,'us','1984-03-01',362879123,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (583552,122469,437373,'app missing info','3m company','30 memorial drive','avon','ma',23220,'us','2004-01-10',6067521,'noah johnson','120 commercial parkway','brandford','ct',64050,'us','1959-12-22',658438344,62,'weston ford','135 fairgrounds memorial pkwy','ithaca','ny',14850,'us','1940-05-06',485722345,38);
+insert into application_dim values (508928,170869,451357,'app received','ag edwards inc','250 hartford avenue','bellingham','ma',20190,'us','2006-12-26',4852976,'william williams','1400 farmington ave','bristol','ct',60100,'us','1940-05-08',546718395,73,'micah hamilton','2 gannett dr','johnson city','ny',13790,'us','1963-07-06',143420273,27);
+insert into application_dim values (557413,123598,422621,'app received','abbott laboratories','700 oak street','brockton','ma',23010,'us','2007-08-24',3958955,'james jones','161 berlin road','cromwell','ct',64160,'us','1965-09-19',724495047,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (534929,181964,484342,'app decline','abercrombie & fitch co','66-4 parkhurst rd','chelmsfod','ma',18240,'us','2010-06-29',4046245,'oliver brown','67 newton rd','danbury','ct',68100,'us','1947-03-28',904170756,66,'wesley sullivan','601 frank stottile blvd','kingston','ny',12401,'us','1949-06-25',785524973,34);
+insert into application_dim values (510653,179829,405861,'app approved','abm industries incorporated','591 memorial dr','chicopee','ma',10200,'us','2010-05-12',7299913,'benjamin davis','656 new haven ave','derby','ct',64180,'us','1946-02-27',669533505,61,'luca wallace','350 e fairmount ave','lakewood','ny',14750,'us','1953-08-18',357294897,39);
+insert into application_dim values (500794,151512,480717,'loan accepted','ace hardware corporation','55 brooksby village way','danvers','ma',19230,'us','2001-08-04',9438286,'elijah miller','69 prospect hill road','east windsor','ct',60880,'us','1962-11-11',889063717,73,'vincent woods','4975 transit rd','lancaster','ny',14086,'us','1950-10-14',314682881,27);
+insert into application_dim values (545929,147683,452946,'loan accepted','bell microproducts inc','137 teaticket hwy','east falmouth','ma',25360,'us','2009-04-29',4494569,'lucas wilson','150 gold star hwy','groton','ct',63400,'us','1958-03-06',493282760,73,'damian cole','579 troy-schenectady road','latham','ny',12110,'us','1965-09-10',175494277,27);
+insert into application_dim values (537473,193895,424737,'app expired','bellsouth corporation','42 fairhaven commons way','fairhaven','ma',27190,'us','2019-11-10',8115293,'mason moore','900 boston post road','guilford','ct',64370,'us','1959-10-29',639172218,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (561385,157426,494425,'app approved','belo corp','374 william s canning blvd','fall river','ma',27210,'us','2017-02-09',9875312,'logan taylor','2300 dixwell ave','hamden','ct',65140,'us','1980-12-28',862377119,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (560028,111092,482824,'app missing info','bemis company inc','121 worcester rd','framingham','ma',17010,'us','2000-07-08',1657247,'alexander anderson','495 flatbush ave','hartford','ct',61060,'us','1979-07-04',871302874,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (506059,196454,423891,'app missing info','benchmark electronics inc','677 timpany blvd','gardner','ma',14400,'us','2013-06-08',7764532,'ethan thomas','180 river rd','lisbon','ct',63510,'us','1965-01-06',779372468,66,'chase reynolds','3222 state rt 11','malone','ny',12953,'us','1961-11-20',841895460,34);
+insert into application_dim values (515329,149194,491985,'app expired','berkshire hathaway inc','337 russell st','hadley','ma',10350,'us','2003-09-14',2797678,'jacob jackson','420 buckland hills dr','manchester','ct',60400,'us','1970-12-06',580412442,51,'kai fisher','200 sunrise mall','massapequa','ny',11758,'us','1983-06-16',919157607,49);
+insert into application_dim values (559800,197522,441488,'app received','best buy co inc','295 plymouth street','halifax','ma',23380,'us','2016-03-30',5141518,'michael white','1365 boston post road','milford','ct',64600,'us','1969-11-17',916667111,51,'emmett ellis','43 stephenville st','massena','ny',13662,'us','1981-06-28',901064263,49);
+insert into application_dim values (503132,147162,440380,'app decline','bethlehem steel corporation','1775 washington st','hanover','ma',23390,'us','2018-07-31',1859920,'daniel harris','1100 new haven road','naugatuck','ct',67700,'us','1970-06-15',744663121,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (522396,110405,411603,'app decline','beverly enterprises inc','280 washington street','hundson','ma',17490,'us','2014-08-30',6007899,'henry martin','315 foxon blvd','new haven','ct',65130,'us','1948-01-11',998153077,62,'nathaniel gibson','470 route 211 east','middletown','ny',10940,'us','1952-11-18',580793110,38);
+insert into application_dim values (578666,193650,437399,'app approved','big lots inc','20 soojian dr','leicester','ma',15240,'us','2004-11-24',3492912,'jackson thompson','164 danbury rd','new milford','ct',67760,'us','1972-02-13',796002652,54,'kingston mcdonald','3133 e main st','mohegan lake','ny',10547,'us','1961-08-07',336848861,46);
+insert into application_dim values (558025,152092,415180,'app decline','bj services company','11 jungle road','leominster','ma',14530,'us','2003-02-27',3542952,'sebastian garcia','3164 berlin turnpike','newington','ct',61110,'us','1949-11-25',261670484,62,'cole cruz','288 larkin','monroe','ny',10950,'us','1977-06-13',717474581,38);
+insert into application_dim values (560377,120789,464955,'app received','bjs wholesale club inc','301 massachusetts ave','luenburg','ma',14620,'us','2015-02-15',310193,'aiden martinez','474 boston post road','north windham','ct',62560,'us','1958-02-13',585309773,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (562006,116327,487813,'app expired','the black & decker corporation','780 lynnway','lynn','ma',19050,'us','2007-07-24',2107212,'matthew robinson','650 main ave','norwalk','ct',68510,'us','1970-07-01',822504514,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (562666,145245,417095,'app approved','black hills corporation','70 pleasant valley street','methuen','ma',18440,'us','2008-04-15',3198198,'samuel clark','680 connecticut avenue','norwalk','ct',68540,'us','1949-12-21',979274989,53,'bentley gomez','1201 rt 300','newburgh','ny',12550,'us','1965-07-14',637023693,47);
+insert into application_dim values (533992,161320,439899,'app received','bmc software inc','830 curran memorial hwy','north adams','ma',12470,'us','2012-01-20',601093,'david rodriguez','220 salem turnpike','norwich','ct',63600,'us','1950-09-03',791400406,71,'ryker murray','255 w main st','avon','ct',6001,'us','1950-07-26',550675099,29);
+insert into application_dim values (585078,182374,495187,'loan accepted','the boeing company','1470 s washington st','north attleboro','ma',27600,'us','2009-01-20',3768649,'joseph lewis','655 boston post rd','old saybrook','ct',64750,'us','1987-09-20',883212630,68,'tristan freeman','120 commercial parkway','branford','ct',6405,'us','1963-08-14',163215999,32);
+insert into application_dim values (500025,146686,427102,'loan accepted','boise cascade corporation','506 state road','dartmouth','ma',27470,'us','2003-09-01',4228915,'carter lee','625 school street','putnam','ct',62600,'us','1982-08-25',870926850,68,'brandon wells','1400 farmington ave','bristol','ct',6010,'us','1942-10-20',974500773,32);
+insert into application_dim values (538823,191093,455349,'app missing info','borders group inc','742 main street','oxford','ma',15370,'us','2005-10-28',5324353,'owen walker','80 town line rd','rocky hill','ct',60670,'us','1987-12-03',270079894,63,'kevin webb','161 berlin road','cromwell','ct',6416,'us','1956-06-16',289932364,37);
+insert into application_dim values (570219,158872,452911,'app received','cintas corp','72 main st','reading','ma',18640,'us','2020-01-10',1221628,'wyatt hall','465 bridgeport avenue','shelton','ct',64840,'us','1941-12-05',401766550,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (519106,126428,474009,'loan accepted','circuit city stores inc','200 otis street','northborough','ma',15320,'us','2014-04-15',8529546,'john allen','235 queen st','southington','ct',64890,'us','1971-12-15',222812975,63,'george stevens','656 new haven ave','derby','ct',6418,'us','1979-06-07',717596357,37);
+insert into application_dim values (556927,123608,476527,'app missing info','cisco systems inc','180 north king street','northhampton','ma',10600,'us','2019-08-03',8182714,'jack young','150 barnum avenue cutoff','stratford','ct',66140,'us','1977-07-21',578350271,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (551031,184355,401554,'app expired','citigroup inc','555 east main st','orange','ma',13640,'us','2006-06-19',2329906,'luke hernandez','970 torringford street','torrington','ct',67900,'us','1968-06-12',226965916,73,'rowan porter','150 gold star hwy','groton','ct',6340,'us','1963-11-04',497098663,27);
+insert into application_dim values (512262,144132,411695,'app received','citizens communications co','555 hubbard ave-suite 12','pittsfield','ma',12010,'us','2010-05-02',2181046,'jayden king','844 no colony road','wallingford','ct',64920,'us','1950-02-26',866850409,51,'braxton hunter','900 boston post road','guilford','ct',6437,'us','1973-07-27',622344023,49);
+insert into application_dim values (597550,109854,424822,'loan accepted','cke restaurants inc','300 colony place','plymouth','ma',23600,'us','2012-01-15',8376112,'dylan wright','910 wolcott st','waterbury','ct',67050,'us','1969-03-25',423532126,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (545603,141289,490417,'app expired','dollar general corporation','301 falls blvd','quincy','ma',21690,'us','2004-12-31',1762348,'grayson lopez','155 waterford parkway no','waterford','ct',63850,'us','1977-08-22',925376395,57,'gael crawford','495 flatbush ave','hartford','ct',6106,'us','1978-11-28',895687597,43);
+insert into application_dim values (537246,105314,470796,'app approved','dollar tree stores inc','36 paramount drive','raynham','ma',27670,'us','2003-09-25',4215035,'levi hill','515 sawmill road','west haven','ct',65160,'us','1942-08-31',935770204,66,'ivan henry','180 river rd','lisbon','ct',6351,'us','1955-02-06',796832610,34);
+insert into application_dim values (589618,136762,410499,'loan accepted','dominion resources inc','450 highland ave','salem','ma',19700,'us','2014-02-22',4889885,'isaac scott','2473 hackworth road','adamsville','al',50050,'us','1968-05-22',484468469,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (568822,191215,457493,'app expired','dominos pizza llc','1180 fall river avenue','seekonk','ma',27710,'us','2016-09-02',1471894,'gabriel green','630 coonial promenade pkwy','alabaster','al',50070,'us','1984-09-02',551060920,51,'maxwell mason','1365 boston post road','milford','ct',6460,'us','1968-03-01',296643867,49);
+insert into application_dim values (562593,160972,432040,'app approved','dover corporation inc','1105 boston road','springfield','ma',11190,'us','2008-12-19',5842569,'julian adams','2643 hwy 280 west','alexander','al',50100,'us','1984-12-04',273256773,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (533739,125096,482876,'app expired','dow chemical company','100 charlton road','sturbridge','ma',15660,'us','2005-07-16',9487997,'mateo baker','540 west bypass','andalusia','al',64200,'us','1964-03-19',711602491,72,'carlos kennedy','315 foxon blvd','new haven','ct',6513,'us','1978-07-21',684604405,28);
+insert into application_dim values (510371,160461,478518,'app approved','dow jones & company inc','262 swansea mall dr','swansea','ma',27770,'us','2007-01-20',1435300,'anthony gonzalez','5560 mcclellan blvd','anniston','al',62060,'us','1940-06-18',823331978,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (583032,155265,406937,'app approved','dpl inc','333 main street','tewksbury','ma',18760,'us','2017-12-02',1221366,'jaxon nelson','1450 no brindlee mtn pkwy','arab ','al',50160,'us','1982-03-01',730646095,68,'juan dixon','3164 berlin turnpike','newington','ct',6111,'us','1960-08-06',411978743,32);
+insert into application_dim values (513932,189045,402264,'app missing info','dqe inc','550 providence hwy','walpole','ma',20810,'us','2016-07-13',2237720,'lincoln carter','1011 us hwy 72 east','athens','al',56110,'us','1962-05-16',756410714,62,'maddox ramos','474 boston post road','north windham','ct',6256,'us','1942-11-27',139534055,38);
+insert into application_dim values (509689,191095,447517,'app decline','ecolab inc','352 palmer road','ware','ma',10820,'us','2006-07-15',2375910,'joshua mitchell','973 gilbert ferry road se','attalla','al',59540,'us','1940-09-08',759748383,73,'justin reyes','650 main ave','norwalk','ct',6851,'us','1983-10-13',295636563,27);
+insert into application_dim values (529653,173137,490343,'app decline','edison international','3005 cranberry hwy rt 6 28','wareham','ma',25380,'us','2005-02-23',6637902,'christopher perez','1717 south college street','auburn','al',68300,'us','1942-07-08',253757974,68,'waylon burns','680 connecticut avenue','norwalk','ct',6854,'us','1982-09-28',659473387,32);
+insert into application_dim values (540040,123577,476473,'loan accepted','egl inc','250 rt 59','airmont','ny',9010,'us','2012-02-18',9480721,'andrew roberts','701 mcmeans ave','bay minette','al',65070,'us','1943-01-09',714304283,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (554685,165306,480882,'app missing info','el paso corporation','141 washington ave extension','albany','ny',22050,'us','2016-04-28',7696013,'theodore turner','750 academy drive','bessemer','al',50220,'us','1988-10-29',995416504,66,'giovanni shaw','655 boston post rd','old saybrook','ct',6475,'us','1982-05-01',582740130,34);
+insert into application_dim values (570921,115850,441373,'app missing info','electronic arts inc','13858 rt 31 w','albion','ny',44110,'us','2014-06-12',2068532,'caleb phillips','312 palisades blvd','birmingham','al',52090,'us','1941-01-30',200857224,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (550691,180507,437943,'loan accepted','electronic data systems corp','2055 niagara falls blvd','amherst','ny',42280,'us','2007-02-25',1115739,'ryan campbell','1600 montclair rd','birmingham','al',52100,'us','1951-01-04',545565364,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (592171,181605,455183,'loan accepted','eli lilly and company','101 sanford farm shpg center','amsterdam','ny',20100,'us','2001-01-03',7209237,'asher parker','5919 trussville crossings pkwy','birmingham','al',52350,'us','1976-01-02',128282521,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (568815,176650,474145,'app expired','emc corporation','297 grant avenue','auburn','ny',30210,'us','2002-07-29',1933384,'nathan evans','9248 parkway east','birmingham','al',52060,'us','1940-07-18',454118727,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (537991,185994,454258,'app received','emcor group inc','4133 veterans memorial drive','batavia','ny',40200,'us','2004-04-09',8185160,'thomas edwards','1972 hwy 431','boaz','al',59570,'us','1942-02-04',374104104,72,'amir black','150 barnum avenue cutoff','stratford','ct',6614,'us','1971-03-10',511534536,28);
+insert into application_dim values (527598,145248,473455,'app expired','emerson electric co','6265 brockport spencerport rd','brockport','ny',44200,'us','2012-08-05',2408133,'leo collins','10675 hwy 5','brent','al',50340,'us','1952-06-07',403579770,50,'king daniels','970 torringford street','torrington','ct',6790,'us','1977-04-09',988250937,50);
+insert into application_dim values (593679,137689,480465,'app received','encompass services corporation','5399 w genesse st','camillus','ny',30310,'us','2018-01-17',8937158,'isaiah stewart','2041 douglas avenue','brewton','al',64260,'us','1963-08-06',525427000,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (542234,178766,482351,'app missing info','energizer holdings inc','3191 county rd 10','canandaigua','ny',44240,'us','2018-01-01',7397608,'charles sanchez','5100 hwy 31','calera','al',50400,'us','1960-09-03',496556439,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (538493,110745,411019,'app approved','energy east corporation','30 catskill','catskill','ny',24140,'us','2018-06-09',622701,'josiah morris','1916 center point rd','center point','al',52150,'us','1964-04-07',224492908,64,'alex nichols','155 waterford parkway no','waterford','ct',6385,'us','1958-05-13',686317516,36);
+insert into application_dim values (537091,124259,494469,'app expired','kla-tencor corporation','161 centereach mall','centereach','ny',17200,'us','2016-11-29',5336866,'hudson rogers','1950 w main st','centre','al',59600,'us','1952-11-18',526451650,58,'jasper grant','515 sawmill road','west haven','ct',6516,'us','1972-12-17',512429656,42);
+insert into application_dim values (528013,141666,479235,'app approved','k-mart corp','3018 east ave','central square','ny',30360,'us','2012-06-25',1837661,'christian reed','16077 highway 280','chelsea','al',50430,'us','1944-07-30',662640018,63,'malachi knight','2473 hackworth road','adamsville','al',35005,'us','1944-02-29',998879258,37);
+insert into application_dim values (588711,179597,450737,'app received','knight-ridder inc','100 thruway plaza','cheektowaga','ny',42250,'us','2019-06-04',1464443,'hunter cook','1415 7th street south','clanton','al',50450,'us','1986-01-21',918105240,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (553511,121931,478808,'app missing info','kohls corp','8064 brewerton rd','cicero','ny',30390,'us','2016-08-30',6154250,'connor morgan','626 olive street sw','cullman','al',50550,'us','1941-10-24',929763381,67,'jude rose','2643 hwy 280 west','alexander city','al',35010,'us','1941-01-02',653647533,33);
+insert into application_dim values (517037,193485,421267,'app received','kpmg consulting inc','5033 transit road','clarence','ny',40310,'us','2009-05-20',7816127,'eli bell','27520 hwy 98','dectatur','al',65260,'us','1968-07-11',556333171,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (519039,180927,459168,'app expired','kroger co','3949 route 31','clay','ny',30410,'us','2013-04-13',4536395,'ezra murphy','2800 spring avn sw','demopolis','al',56030,'us','1964-09-09',226905607,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (569553,137523,499929,'loan accepted','l-3 communications holdings inc','139 merchant place','cobleskill','ny',20430,'us','2015-08-26',5375154,'aaron bailey','969 us hwy 80 west','dothan','al',67320,'us','1975-09-03',247250067,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (593214,141789,433355,'app approved','laboratory corporation of america holdings','85 crooked hill road','commack','ny',17250,'us','2011-04-17',3404753,'landon rivera','3300 south oates street','dothan','al',63010,'us','1951-02-25',826646191,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (509292,170928,431875,'app missing info','lam research corporation','872 route 13','cortlandville','ny',30450,'us','2009-11-26',2095136,'adrian cooper','4310 montgomery hwy','enterprise','al',63030,'us','1961-09-06',435145302,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (514610,120804,458039,'app received','landamerica financial group inc','279 troy road','east greenbush','ny',20610,'us','2012-01-22',6601714,'jonathan richardson','600 boll weevil circle','eufaula','al',63300,'us','1947-10-03',410583572,62,'antonio spencer','1717 south college street','auburn','al',36830,'us','1982-04-09',176623816,38);
+insert into application_dim values (560575,164161,484668,'app missing info','lands end inc','2465 hempstead turnpike','east meadow','ny',15540,'us','2008-08-16',2636490,'nolan cox','3176 south eufaula avenue','fairfield','al',60270,'us','1942-03-13',917976015,72,'abraham gardner','701 mcmeans ave','bay minette','al',36507,'us','1943-12-06',533370482,28);
+insert into application_dim values (585637,178434,447103,'app missing info','landstar system inc','6438 basile rowe','east syracuse','ny',30570,'us','2014-10-02',9212198,'jeremiah howard','7100 aaron aronov drive','fairhope','al',50640,'us','1942-10-17',735389583,52,'timothy stephens','750 academy drive','bessemer','al',35022,'us','1957-09-22',462288919,48);
+insert into application_dim values (540939,147610,424141,'loan accepted','la-z-boy inc','25737 us rt 11','evans mills','ny',36370,'us','2017-01-10',4994051,'easton ward','10040 county road 48','fairhope','al',65330,'us','1986-12-15',214181698,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (574555,163493,497458,'app missing info','mail-well inc','901 route 110','farmingdale','ny',17350,'us','2019-11-13',5682444,'elias torres','3186 hwy 171 north','fayette','al',55550,'us','1975-04-28',954201535,60,'rhett pierce','1600 montclair rd','birmingham','al',35210,'us','1957-05-17',508554155,40);
+insert into application_dim values (541993,136365,478782,'app missing info','mandalay resort group','2400 route 9','fishkill','ny',25240,'us','2010-10-28',8273512,'colton peterson','3100 hough rd','florence','al',56300,'us','1952-10-12',943206405,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (507448,134841,498740,'app expired','manor care inc','10401 bennett road','fredonia','ny',40630,'us','2008-07-28',8551525,'cameron gray','2200 south mckenzie st','foley','al',65350,'us','1976-07-10',994863193,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (591633,167758,483803,'app missing info','manpower inc','1818 state route 3','fulton','ny',30690,'us','2003-03-14',2996137,'carson ramirez','2001 glenn bldv sw','fort payne','al',59680,'us','1942-12-27',928948817,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (588845,194103,466287,'app expired','marathon oil corporation','4300 lakeville road','geneseo','ny',44540,'us','2016-07-30',4170297,'robert james','340 east meighan blvd','gadsden','al',59030,'us','1971-03-05',464323978,61,'xander wagner','10675 hwy 5','brent','al',35034,'us','1975-06-15',940783597,39);
+insert into application_dim values (561761,152476,498780,'app missing info','mariner health care inc','990 route 5 20','geneva','ny',44560,'us','2016-01-08',2296105,'angel watson','890 odum road','gardendale','al',50710,'us','1963-10-25',869470660,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (536609,114037,419936,'app expired','markel corporation','311 rt 9w','glenmount','ny',20770,'us','2016-06-06',5351273,'maverick brooks','1608 w magnolia ave','geneva','al',63400,'us','1967-09-16',639301359,71,'dean ray','5100 hwy 31','calera','al',35040,'us','1945-05-01',523979143,29);
+insert into application_dim values (597183,191029,440627,'app approved','marriott international inc','200 dutch meadows ln','glenvilled','ny',23020,'us','2005-12-15',8910794,'nicholas kelly','501 willow lane','greenville','al',60370,'us','1971-03-03',623631789,59,'lorenzo watkins','1916 center point rd','center point','al',35215,'us','1956-07-03',970949616,41);
+insert into application_dim values (565335,165555,407184,'app expired','marsh & mclennan companies inc','100 elm ridge center dr','greece','ny',46260,'us','2006-02-10',8514387,'dominic sanders','170 fort morgan road','gulf shores','al',65420,'us','1987-09-05',143826270,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (580348,136686,408392,'app received','marsh supermarkets inc','1549 rt 9','halfmoon','ny',20650,'us','1999-09-23',2490106,'jaxson price','11697 us hwy 431','guntersville','al',59760,'us','1971-08-22',463407517,69,'karter carroll','16077 highway 280','chelsea','al',35043,'us','1970-11-15',993270291,31);
+insert into application_dim values (528551,118688,450280,'app approved','marshall & ilsley corporation','5360 southwestern blvd','hamburg','ny',40750,'us','2016-04-06',6483213,'greyson bennett','42417 hwy 195','haleyville','al',55650,'us','1950-03-07',175493327,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (552717,134203,495740,'app expired','martin marietta materials inc','103 north caroline st','herkimer','ny',33500,'us','2017-09-15',7005868,'adam wood','1706 military street south','hamilton','al',55700,'us','1980-07-24',814754831,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (576158,106618,416531,'app decline','masco corporation','1000 state route 36','hornell','ny',48430,'us','2020-10-18',6440610,'ian barnes','1201 hwy 31 nw','hartselle','al',56400,'us','1940-02-26',268849976,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (539497,196720,416609,'loan accepted','massey energy company','1400 county rd 64','horseheads','ny',48450,'us','2009-01-25',5547882,'austin ross','209 lakeshore parkway','homewood','al',52090,'us','1940-03-24',248322991,73,'hayden cunningham','2800 spring avn sw','decatur','al',35603,'us','1944-04-14',152312786,27);
+insert into application_dim values (518305,188698,473202,'app approved','mastec inc','135 fairgrounds memorial pkwy','ithaca','ny',48500,'us','2006-05-10',1610763,'santiago henderson','2780 john hawkins pkwy','hover','al',52440,'us','1947-05-23',119663985,56,'graham bradley','969 us hwy 80 west','demopolis','al',36732,'us','1958-03-01',727015123,44);
+insert into application_dim values (579302,123729,455241,'app received','mattel inc','2 gannett dr','johnson city','ny',37900,'us','2010-02-15',483667,'jordan coleman','5335 hwy 280 south','hoover','al',52420,'us','1968-08-15',871801608,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (532207,147151,497874,'loan accepted','maxim integrated products inc','233 5th ave ext','johnstown','ny',20950,'us','2020-05-08',9976876,'cooper jenkins','1007 red farmer drive','hueytown','al',50230,'us','1965-06-08',212437186,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (550996,180055,465189,'loan accepted','oneok inc','601 frank stottile blvd','kingston','ny',24010,'us','2000-11-16',8742340,'brayden perry','2900 s mem pkwydrake ave','huntsville','al',58010,'us','1966-12-09',884147220,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (561681,160323,463783,'loan accepted','oracle corp','350 e fairmount ave','lakewood','ny',47500,'us','2013-05-23',7042382,'roman powell','11610 memorial pkwy south','huntsville','al',58030,'us','1948-02-16',495204424,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (535363,185121,438034,'app approved','oshkosh truck corp','4975 transit rd','lancaster','ny',40860,'us','2013-05-14',4696726,'evan long','2200 sparkman drive','huntsville','al',58100,'us','1940-11-23',293623768,60,'zayden fox','7100 aaron aronov drive','fairfield','al',35064,'us','1940-10-26',207097731,40);
+insert into application_dim values (516338,114766,412829,'loan accepted','outback steakhouse inc','579 troy-schenectady road','latham','ny',21100,'us','2001-01-14',1572994,'ezekiel patterson','330 sutton rd','huntsville','al',57630,'us','1944-06-03',667140756,66,'joel riley','10040 county road 48','fairhope','al',36533,'us','1949-05-18',764349434,34);
+insert into application_dim values (539625,146887,457409,'app received','owens & minor inc','5783 so transit road','lockport','ny',40940,'us','2016-01-08',9321966,'xavier hughes','6140a univ drive','huntsville','al',58060,'us','1944-11-23',410944396,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (573064,158621,483164,'app missing info','owens corning ','7155 state rt 12 s','lowville','ny',33670,'us','2015-05-24',4865898,'jose flores','4206 n college ave','jackson','al',65450,'us','1956-03-30',893034853,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (508371,161291,429414,'app approved','owens-illinois inc','425 route 31','macedon','ny',45020,'us','2004-01-24',7086726,'jace washington','1625 pelham south','jacksonville','al',62650,'us','1958-05-21',452244997,67,'emiliano weaver','2200 south mckenzie st','foley','al',36535,'us','1965-05-13',958815483,33);
+insert into application_dim values (545839,160121,441005,'app received','oxford health plans inc','3222 state rt 11','malone','ny',29530,'us','2003-06-12',6185929,'jameson butler','1801 hwy 78 east','jasper','al',55010,'us','1980-02-08',765773475,70,'avery greene','2001 glenn bldv sw','fort payne','al',35968,'us','1943-02-05',301349384,30);
+insert into application_dim values (500197,133380,435233,'app missing info','paccar inc','200 sunrise mall','massapequa','ny',17580,'us','2012-01-07',7444744,'leonardo simmons','8551 whitfield ave','leeds','al',50940,'us','1967-04-11',117833328,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (515094,120103,419619,'app received','pacificare health systems inc','43 stephenville st','massena','my',36620,'us','2017-06-18',8227472,'bryson foster','8650 madison blvd','madison','al',57580,'us','1988-10-13',452927578,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (550067,194164,467922,'app expired','packaging corp of america','750 middle country road','middle island','ny',19530,'us','2012-11-01',5274732,'axel gonzales','145 kelley blvd','millbrook','al',60540,'us','1945-09-08',172790615,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (505986,107441,448368,'loan accepted','pactiv corp','470 route 211 east','middletown','ny',9400,'us','2005-06-18',1552272,'everett bryant','1970 s university blvd','mobile','al',66090,'us','1980-06-01',612155663,68,'myles sims','501 willow lane','greenville','al',36037,'us','1940-10-13',983447214,32);
+insert into application_dim values (511109,149280,441338,'app decline','pall corp','3133 e main st','mohegan lake','ny',5470,'us','2000-09-07',9261772,'parker alexander','6350 cottage hill road','mobile','al',66090,'us','1951-06-12',470710929,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into application_dim values (571881,186099,447665,'app received','pantry inc','288 larkin','monroe','ny',9500,'us','2003-08-08',4165451,'kayden russell','101 south beltline highway','mobile','al',66060,'us','1973-05-25',572146751,52,'river peters','11697 us hwy 431','guntersville','al',35976,'us','1987-09-21',113955943,48);
+insert into application_dim values (521095,106553,490912,'loan accepted','park place entertainment corp','41 anawana lake road','monticello','ny',27010,'us','2001-07-27',3045216,'miles griffin','2500 dawes road','mobile','al',66950,'us','1986-12-19',978365101,52,'steven kelley','42417 hwy 195','haleyville','al',35565,'us','1973-09-12',309336938,48);
+insert into application_dim values (516948,146515,480106,'app approved','parker hannifin corp','4765 commercial drive','new hartford','ny',34130,'us','2004-05-31',1274790,'sawyer diaz','5245 rangeline service rd','mobile','al',66190,'us','1959-03-30',142835758,52,'thiago franklin','1706 military street south','hamilton','al',35570,'us','1957-06-19',201827088,48);
+insert into application_dim values (508824,161630,489263,'loan accepted','pathmark stores inc','1201 rt 300','newburgh','ny',25500,'us','2012-03-18',1392695,'jason hayes','685 schillinger rd','mobile','al',66950,'us','1971-01-07',637124965,100,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+--end application_dim
+
+--start credit_dim
+
+insert into credit_dim values (355795,128486,555053,509,614,91,2,49,35);
+insert into credit_dim values (371389,122469,583552,560,631,85,62,81,4,618,88,39,25,9,624);
+insert into credit_dim values (317018,170869,508928,517,718,75,11,53,92,755,64,6,17,91,736);
+insert into credit_dim values (305903,123598,557413,464,709,45,52,53,14);
+insert into credit_dim values (348415,181964,534929,486,724,36,66,29,60,634,10,49,52,57,679);
+insert into credit_dim values (343751,179829,510653,547,617,62,6,96,13,596,63,66,34,55,606);
+insert into credit_dim values (313743,151512,500794,371,667,71,38,76,14,746,33,82,70,1,706);
+insert into credit_dim values (337782,147683,545929,528,742,37,79,46,70,583,31,14,95,22,662);
+insert into credit_dim values (373372,193895,537473,597,705,32,39,74,88);
+insert into credit_dim values (364267,157426,561385,476,717,93,6,25,22);
+insert into credit_dim values (398649,111092,560028,410,707,45,76,23,33);
+insert into credit_dim values (340305,196454,506059,362,688,41,14,62,72,651,16,92,63,14,669);
+insert into credit_dim values (394265,149194,515329,485,776,95,10,12,38,741,72,32,72,91,758);
+insert into credit_dim values (346918,197522,559800,387,619,17,81,3,48,651,87,3,69,88,635);
+insert into credit_dim values (301698,147162,503132,436,699,92,39,92,60);
+insert into credit_dim values (341925,110405,522396,401,582,73,76,63,53,688,88,51,72,94,635);
+insert into credit_dim values (313178,193650,578666,414,654,55,55,51,40,588,24,62,33,28,621);
+insert into credit_dim values (389366,152092,558025,368,656,15,82,9,39,640,20,51,26,4,648);
+insert into credit_dim values (362588,120789,560377,470,730,7,76,25,41);
+insert into credit_dim values (387540,116327,562006,417,729,96,7,87,64);
+insert into credit_dim values (343363,145245,562666,445,658,4,8,6,0,605,58,30,33,58,631);
+insert into credit_dim values (324807,161320,533992,536,743,72,92,68,42,777,66,14,14,49,760);
+insert into credit_dim values (305105,182374,585078,511,731,3,83,35,67,669,80,13,37,72,700);
+insert into credit_dim values (343822,146686,500025,394,708,50,44,31,92,680,47,20,82,22,694);
+insert into credit_dim values (385582,191093,538823,570,750,20,12,40,22,778,6,1,71,68,764);
+insert into credit_dim values (372355,158872,570219,380,655,87,56,62,76);
+insert into credit_dim values (366569,126428,519106,386,643,60,17,16,90,698,35,15,28,66,670);
+insert into credit_dim values (399143,123608,556927,538,734,0,47,73,6);
+insert into credit_dim values (353116,184355,551031,520,744,85,67,42,30,799,51,12,63,50,771);
+insert into credit_dim values (317975,144132,512262,592,660,24,50,51,27,637,13,20,63,51,648);
+insert into credit_dim values (365622,109854,597550,493,687,32,60,67,31);
+insert into credit_dim values (335478,141289,545603,425,748,18,14,93,54,630,64,27,57,20,689);
+insert into credit_dim values (336203,105314,537246,570,733,40,7,71,80,696,81,2,37,37,714);
+insert into credit_dim values (320288,136762,589618,428,781,38,89,4,65);
+insert into credit_dim values (310651,191215,568822,418,777,84,77,85,56,700,1,2,23,27,738);
+insert into credit_dim values (390253,160972,562593,554,776,23,34,64,59);
+insert into credit_dim values (366986,125096,533739,372,732,54,63,61,4,765,64,36,22,4,748);
+insert into credit_dim values (356293,160461,510371,513,753,49,46,39,68);
+insert into credit_dim values (309967,155265,583032,514,679,10,13,4,94,718,70,0,19,68,698);
+insert into credit_dim values (321660,189045,513932,549,616,28,8,39,69,753,65,66,20,40,684);
+insert into credit_dim values (303995,191095,509689,442,650,87,71,52,43,792,80,6,2,50,721);
+insert into credit_dim values (384621,173137,529653,392,781,94,57,77,66,602,54,25,66,12,691);
+insert into credit_dim values (394124,123577,540040,351,666,15,6,86,2);
+insert into credit_dim values (390568,165306,554685,355,774,9,55,68,4,724,40,44,95,69,749);
+insert into credit_dim values (310499,115850,570921,518,606,3,18,59,11);
+insert into credit_dim values (324140,180507,550691,484,624,82,22,94,49);
+insert into credit_dim values (312645,181605,592171,478,617,34,39,19,63);
+insert into credit_dim values (397708,176650,568815,527,770,8,31,5,66);
+insert into credit_dim values (304995,185994,537991,573,701,78,69,41,53,583,18,11,23,37,642);
+insert into credit_dim values (380582,145248,527598,446,713,23,67,18,32,667,56,0,35,16,690);
+insert into credit_dim values (304542,137689,593679,436,670,68,56,13,31);
+insert into credit_dim values (358032,178766,542234,511,728,96,62,89,73);
+insert into credit_dim values (310380,110745,538493,570,628,43,12,48,30,741,57,11,81,18,684);
+insert into credit_dim values (374929,124259,537091,523,652,58,66,6,46,600,74,74,27,2,626);
+insert into credit_dim values (349645,141666,528013,499,664,24,67,77,66,752,35,4,27,12,708);
+insert into credit_dim values (362187,179597,588711,425,722,3,79,93,61);
+insert into credit_dim values (385382,121931,553511,391,621,35,60,18,29,608,58,75,29,84,614);
+insert into credit_dim values (386091,193485,517037,542,780,71,24,77,39);
+insert into credit_dim values (308034,180927,519039,350,669,96,94,13,12);
+insert into credit_dim values (383028,137523,569553,510,788,44,66,39,39);
+insert into credit_dim values (391382,141789,593214,435,616,5,30,10,9);
+insert into credit_dim values (397076,170928,509292,548,799,93,16,5,19);
+insert into credit_dim values (378867,120804,514610,352,786,15,11,10,78,696,14,84,96,51,741);
+insert into credit_dim values (348090,164161,560575,560,643,52,92,66,79,606,63,18,83,19,624);
+insert into credit_dim values (368877,178434,585637,388,611,16,50,28,56,686,32,19,35,60,648);
+insert into credit_dim values (374948,147610,540939,451,593,8,39,58,50);
+insert into credit_dim values (380442,163493,574555,357,681,61,56,43,48,687,73,14,5,62,684);
+insert into credit_dim values (355797,136365,541993,462,665,86,64,18,6);
+insert into credit_dim values (396041,134841,507448,399,609,58,16,71,31);
+insert into credit_dim values (374968,167758,591633,508,591,70,24,43,28);
+insert into credit_dim values (391816,194103,588845,595,735,36,95,62,87,618,55,66,26,22,676);
+insert into credit_dim values (386370,152476,561761,565,759,69,15,67,7);
+insert into credit_dim values (325388,114037,536609,532,632,18,86,73,94,583,30,47,36,86,607);
+insert into credit_dim values (323648,191029,597183,581,657,49,41,4,55,713,36,60,63,3,685);
+insert into credit_dim values (321795,165555,565335,461,649,32,69,55,26);
+insert into credit_dim values (384060,136686,580348,390,797,39,34,13,59,738,65,1,18,92,767);
+insert into credit_dim values (351306,118688,528551,415,775,12,37,55,28);
+insert into credit_dim values (307961,134203,552717,579,714,31,91,55,23);
+insert into credit_dim values (322553,106618,576158,371,777,77,90,42,27);
+insert into credit_dim values (385856,196720,539497,546,780,13,39,61,64,662,46,44,35,25,721);
+insert into credit_dim values (317356,188698,518305,406,749,22,3,76,22,706,30,25,85,54,727);
+insert into credit_dim values (399192,123729,579302,462,743,12,89,6,69);
+insert into credit_dim values (320431,147151,532207,516,636,90,61,77,25);
+insert into credit_dim values (372199,180055,550996,439,607,59,56,94,67);
+insert into credit_dim values (331233,160323,561681,591,676,70,46,15,88);
+insert into credit_dim values (351616,185121,535363,578,627,42,11,73,80,709,43,33,21,0,668);
+insert into credit_dim values (326516,114766,516338,481,596,55,87,52,31,725,73,25,81,85,660);
+insert into credit_dim values (326119,146887,539625,360,766,7,65,51,90);
+insert into credit_dim values (306043,158621,573064,385,638,74,22,90,53);
+insert into credit_dim values (331812,161291,508371,582,588,54,20,26,13,757,1,0,7,8,672);
+insert into credit_dim values (310958,160121,545839,402,799,60,56,38,10,745,58,14,70,79,772);
+insert into credit_dim values (309933,133380,500197,552,755,62,29,21,76);
+insert into credit_dim values (366064,120103,515094,408,780,1,57,87,80);
+insert into credit_dim values (391419,194164,550067,507,792,33,30,87,8);
+insert into credit_dim values (393918,107441,505986,440,702,13,73,37,49,766,92,6,18,84,734);
+insert into credit_dim values (383438,149280,511109,367,644,49,75,49,64);
+insert into credit_dim values (362831,186099,571881,542,764,92,13,89,61,713,25,4,9,57,738);
+insert into credit_dim values (327297,106553,521095,366,774,57,94,69,25,757,61,5,41,78,765);
+insert into credit_dim values (378137,146515,516948,548,598,1,36,7,88,617,74,19,28,44,607);
+insert into credit_dim values (310213,161630,508824,371,610,87,71,91,53);
+
+--end credit_dim
+
+--start date_dim
+
+insert into date_dim values (128486,'2012-04-30','2012-04-30','2012-05-01','2012-05-02','2012-05-02',NULL,NULL,'2012-05-27');
+insert into date_dim values (122469,'2016-10-06','2016-10-06','2016-10-07','2016-10-07',NULL,NULL,NULL,NULL);
+insert into date_dim values (170869,'2014-07-19','2014-07-19','2014-07-21',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (123598,'2019-10-02','2019-10-02','2019-10-05',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (181964,'2012-04-01','2012-04-01','2012-04-03','2014-11-19','2014-11-19',NULL,'2012-04-03',NULL);
+insert into date_dim values (179829,'2014-11-17','2014-11-17','2014-11-18','2017-11-17','2017-11-17',NULL,NULL,NULL);
+insert into date_dim values (151512,'2017-11-14','2017-11-14','2017-11-17','2014-03-14','2014-03-14','2014-03-19',NULL,NULL);
+insert into date_dim values (147683,'2014-03-12','2014-03-12','2014-03-14','2015-10-25','2015-10-25','2015-10-25',NULL,NULL);
+insert into date_dim values (193895,'2015-10-22','2015-10-22','2015-10-25','2017-07-30','2017-07-30',NULL,NULL,'2017-08-24');
+insert into date_dim values (157426,'2017-07-27','2017-07-27','2017-07-30','2019-12-14','2019-12-14',NULL,NULL,NULL);
+insert into date_dim values (111092,'2019-12-12','2019-12-12','2019-12-14','2014-02-02',NULL,NULL,NULL,NULL);
+insert into date_dim values (196454,'2014-02-01','2014-02-01','2014-02-02','2015-08-22',NULL,NULL,NULL,NULL);
+insert into date_dim values (149194,'2015-08-21','2015-08-21','2015-08-22',NULL,NULL,NULL,NULL,'2016-01-25');
+insert into date_dim values (197522,'2012-07-07','2012-07-07','2012-07-08','2016-05-03',NULL,NULL,NULL,NULL);
+insert into date_dim values (147162,'2012-07-11','2012-07-11','2012-07-12',NULL,'2012-07-12',NULL,'2012-07-12',NULL);
+insert into date_dim values (110405,'2013-12-03','2013-12-03','2013-12-06','2018-12-02','2018-12-02',NULL,'2013-12-06',NULL);
+insert into date_dim values (193650,'2016-05-02','2016-05-02','2016-05-03','2012-07-20','2012-07-20',NULL,NULL,NULL);
+insert into date_dim values (152092,'2019-01-04','2019-01-04','2019-01-06',NULL,'2019-01-06',NULL,'2019-01-04',NULL);
+insert into date_dim values (120789,'2016-05-14','2016-05-14','2016-05-16','2014-10-31',NULL,NULL,NULL,NULL);
+insert into date_dim values (116327,'2018-11-30','2018-11-30','2018-12-01','2019-01-03','2019-01-03',NULL,NULL,'2019-01-28');
+insert into date_dim values (145245,'2012-07-18','2012-07-18','2012-07-20','2014-10-01','2014-10-01',NULL,NULL,NULL);
+insert into date_dim values (161320,'2019-01-26','2019-01-26','2019-01-28',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (182374,'2014-10-28','2014-10-28','2014-10-30','2013-09-30','2013-09-30','2013-10-04',NULL,NULL);
+insert into date_dim values (146686,'2019-01-02','2019-01-02','2019-01-03','2014-04-10','2014-04-10','2014-04-11',NULL,NULL);
+insert into date_dim values (191093,'2014-09-28','2014-09-28','2014-09-30','2013-11-01',NULL,NULL,NULL,NULL);
+insert into date_dim values (158872,'2014-07-02','2014-07-02','2014-07-05',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (126428,'2013-09-26','2013-09-26','2013-09-29','2015-10-31','2015-10-31','2015-11-12',NULL,NULL);
+insert into date_dim values (123608,'2014-04-08','2014-04-08','2014-04-09','2013-05-19',NULL,NULL,NULL,NULL);
+insert into date_dim values (184355,'2013-10-31','2013-10-31','2013-11-01','2017-01-13','2017-01-13',NULL,NULL,'2017-02-07');
+insert into date_dim values (144132,'2015-11-15','2015-11-15','2015-11-16','2015-04-01',NULL,NULL,NULL,NULL);
+insert into date_dim values (109854,'2015-10-29','2015-10-29','2015-10-30','2016-02-22','2016-02-22','2016-02-25',NULL,NULL);
+insert into date_dim values (141289,'2013-05-16','2013-05-16','2013-05-18','2017-12-14','2017-12-14',NULL,NULL,'2018-01-08');
+insert into date_dim values (105314,'2017-01-11','2017-01-11','2017-01-13','2013-05-21','2013-05-21',NULL,NULL,NULL);
+insert into date_dim values (136762,'2015-03-29','2015-03-29','2015-04-01','2014-03-28','2014-03-28','2014-04-11',NULL,NULL);
+insert into date_dim values (191215,'2016-02-20','2016-02-20','2016-02-22','2018-01-14','2018-01-14',NULL,NULL,'2018-02-08');
+insert into date_dim values (160972,'2017-12-12','2017-12-12','2017-12-14','2017-10-01','2017-10-01',NULL,NULL,NULL);
+insert into date_dim values (125096,'2013-05-19','2013-05-19','2013-05-20','2018-11-08','2018-11-08',NULL,NULL,'2018-12-03');
+insert into date_dim values (160461,'2014-03-25','2014-03-25','2014-03-27','2015-10-08','2015-10-08',NULL,NULL,NULL);
+insert into date_dim values (155265,'2018-01-11','2018-01-11','2018-01-14','2019-09-02','2019-09-02',NULL,NULL,NULL);
+insert into date_dim values (189045,'2017-09-28','2017-09-28','2017-09-30','2012-08-30',NULL,NULL,NULL,NULL);
+insert into date_dim values (191095,'2019-06-19','2019-06-19','2019-06-20','2017-01-20','2017-01-20',NULL,'2017-01-20',NULL);
+insert into date_dim values (173137,'2013-05-08','2013-05-08','2013-05-11','2015-09-04','2015-09-04',NULL,'2015-09-04',NULL);
+insert into date_dim values (123577,'2018-11-06','2018-11-06','2018-11-08',NULL,'2018-11-08','2018-11-08',NULL,NULL);
+insert into date_dim values (165306,'2015-10-06','2015-10-06','2015-10-08','2016-03-10',NULL,NULL,NULL,NULL);
+insert into date_dim values (115850,'2019-08-29','2019-08-29','2019-09-01',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (180507,'2012-08-29','2012-08-29','2012-08-30','2013-09-29','2013-09-29','2013-10-06',NULL,NULL);
+insert into date_dim values (181605,'2017-01-19','2017-01-19','2017-01-20','2016-11-20','2016-11-20','2016-11-29',NULL,NULL);
+insert into date_dim values (176650,'2015-08-31','2015-08-31','2015-09-03','2017-10-28','2017-10-28',NULL,NULL,'2017-11-22');
+insert into date_dim values (185994,'2016-11-20','2016-11-20','2016-11-21','2018-11-19',NULL,NULL,NULL,NULL);
+insert into date_dim values (145248,'2016-03-08','2016-03-08','2016-03-10',NULL,NULL,NULL,NULL,'2017-01-25');
+insert into date_dim values (137689,'2017-09-05','2017-09-05','2017-09-08','2018-12-10',NULL,NULL,NULL,NULL);
+insert into date_dim values (178766,'2013-09-27','2013-09-27','2013-09-28',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (110745,'2016-11-18','2016-11-18','2016-11-19','2013-11-23','2013-11-23',NULL,NULL,NULL);
+insert into date_dim values (124259,'2017-10-27','2017-10-27','2017-10-28','2012-05-27','2012-05-27',NULL,NULL,'2012-06-21');
+insert into date_dim values (141666,'2018-11-15','2018-11-15','2018-11-18','2014-08-12','2014-08-12',NULL,NULL,NULL);
+insert into date_dim values (179597,'2017-06-19','2017-06-19','2017-06-22','2017-02-26',NULL,NULL,NULL,NULL);
+insert into date_dim values (121931,'2018-12-07','2018-12-07','2018-12-10',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (193485,'2012-01-13','2012-01-13','2012-01-14','2017-03-04',NULL,NULL,NULL,NULL);
+insert into date_dim values (180927,'2013-11-20','2013-11-20','2013-11-23','2014-02-20','2014-02-20',NULL,NULL,'2014-03-17');
+insert into date_dim values (137523,'2012-05-24','2012-05-24','2012-05-27','2016-06-08','2016-06-08','2016-06-08',NULL,NULL);
+insert into date_dim values (141789,'2014-08-09','2014-08-09','2014-08-11','2012-12-03','2012-12-03',NULL,NULL,NULL);
+insert into date_dim values (170928,'2017-02-24','2017-02-24','2017-02-26','2017-08-11',NULL,NULL,NULL,NULL);
+insert into date_dim values (120804,'2015-07-20','2015-07-20','2015-07-22','2019-04-17',NULL,NULL,NULL,NULL);
+insert into date_dim values (164161,'2017-03-02','2017-03-02','2017-03-03','2012-08-03',NULL,NULL,NULL,NULL);
+insert into date_dim values (178434,'2014-02-16','2014-02-16','2014-02-19','2015-01-24',NULL,NULL,NULL,NULL);
+insert into date_dim values (147610,'2016-06-05','2016-06-05','2016-06-08','2017-03-02','2017-03-02','2017-03-10',NULL,NULL);
+insert into date_dim values (163493,'2012-12-01','2012-12-01','2012-12-03','2018-06-28',NULL,NULL,NULL,NULL);
+insert into date_dim values (136365,'2017-08-08','2017-08-08','2017-08-10','2013-04-27',NULL,NULL,NULL,NULL);
+insert into date_dim values (134841,'2019-04-16','2019-04-16','2019-04-17','2012-10-07','2012-10-07',NULL,NULL,'2012-11-01');
+insert into date_dim values (167758,'2012-08-02','2012-08-02','2012-08-03',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (194103,'2015-01-21','2015-01-21','2015-01-24','2016-04-11','2016-04-11',NULL,NULL,'2016-05-06');
+insert into date_dim values (152476,'2017-02-27','2017-02-27','2017-03-01','2014-08-14',NULL,NULL,NULL,NULL);
+insert into date_dim values (114037,'2018-06-26','2018-06-26','2018-06-28','2012-09-24','2012-09-24',NULL,NULL,'2012-10-19');
+insert into date_dim values (191029,'2013-04-25','2013-04-25','2013-04-26','2015-06-15','2015-06-15',NULL,NULL,NULL);
+insert into date_dim values (165555,'2012-10-03','2012-10-03','2012-10-06',NULL,NULL,NULL,NULL,'2013-01-25');
+insert into date_dim values (136686,'2017-09-21','2017-09-21','2017-09-24','2015-11-17',NULL,NULL,NULL,NULL);
+insert into date_dim values (118688,'2016-04-07','2016-04-07','2016-04-10','2017-05-28','2017-05-28',NULL,NULL,NULL);
+insert into date_dim values (134203,'2014-08-13','2014-08-13','2014-08-14','2016-06-19','2016-06-19',NULL,NULL,'2016-07-14');
+insert into date_dim values (106618,'2012-05-04','2012-05-04','2012-05-05','2018-04-24','2018-04-24',NULL,'2018-04-24',NULL);
+insert into date_dim values (196720,'2012-09-20','2012-09-20','2012-09-23','2016-12-12','2016-12-12','2016-12-12',NULL,NULL);
+insert into date_dim values (188698,'2015-06-14','2015-06-15',NULL,'2015-06-15',NULL,NULL,NULL);
+insert into date_dim values (123729,'2017-11-06','2017-11-08','2012-10-09',NULL,NULL,NULL,NULL);
+insert into date_dim values (147151,'2015-11-16','2015-11-14','2015-11-16','2015-08-16','2015-08-16','2015-08-19',NULL,NULL);
+insert into date_dim values (180055,'2017-05-27','2017-05-26','2017-05-27',NULL,'2017-05-27','2017-06-01',NULL,NULL);
+insert into date_dim values (160323,'2016-06-19','2016-06-18','2016-06-19','2018-01-28','2018-01-28','2018-02-01',NULL,NULL);
+insert into date_dim values (185121,'2018-04-21','2018-04-24',NULL,'2018-04-24',NULL,NULL,NULL);
+insert into date_dim values (114766,'2016-12-11','2016-12-10','2016-12-11','2013-02-28','2013-02-28','2013-03-07',NULL,NULL);
+insert into date_dim values (146887,'2017-01-18','2017-01-18','2017-01-20','2014-11-14',NULL,NULL,NULL,NULL);
+insert into date_dim values (158621,'2012-10-07','2012-10-07','2012-10-09',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (161291,'2015-08-14','2015-08-14','2015-08-16','2012-12-22','2012-12-22',NULL,NULL,NULL);
+insert into date_dim values (160121,'2014-07-11','2014-07-11','2014-07-14','2018-10-18',NULL,NULL,NULL,NULL);
+insert into date_dim values (133380,'2018-01-26','2018-01-26','2018-01-27','2019-06-15',NULL,NULL,NULL,NULL);
+insert into date_dim values (120103,'2014-11-28','2014-11-28','2014-11-29',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (194164,'2013-02-26','2013-02-26','2013-02-28',NULL,NULL,NULL,NULL,'2014-01-25');
+insert into date_dim values (107441,'2014-11-14','2014-11-13','2014-11-14',NULL,'2014-11-14','2014-11-18',NULL,NULL);
+insert into date_dim values (149280,'2016-11-13','2016-11-13','2016-11-14',NULL,'2016-11-14',NULL,'2020-11-14',NULL);
+insert into date_dim values (186099,'2014-05-03','2014-05-03','2014-05-06',NULL,NULL,NULL,NULL,NULL);
+insert into date_dim values (106553,'2012-12-21','2012-12-20','2012-12-21',NULL,'2012-12-21','2013-01-01',NULL,NULL);
+insert into date_dim values (146515,'2018-10-15','2018-10-15','2018-10-18',NULL,'2018-10-18',NULL,NULL,NULL);
+insert into date_dim values (161630,'2019-06-15','2019-06-13','2019-06-15',NULL,'2019-06-15','2019-06-23',NULL,NULL);
+
+
+--end date_dim
+
+--start decision_dim
+
+insert into decision_dim values (276086,128486,555053,'yes',191763,9,9,'app expired');
+insert into decision_dim values (268366,122469,583552,'pending',0,0,0,'app missing info');
+insert into decision_dim values (247216,170869,508928,'pending',0,0,0,'app received');
+insert into decision_dim values (250220,123598,557413,'pending',0,0,0,'app received');
+insert into decision_dim values (259137,181964,534929,'no',0,0,0,'app decline');
+insert into decision_dim values (217658,179829,510653,'yes',102539,1,18,'app approved');
+insert into decision_dim values (218591,151512,500794,'yes',52646,6,6,'loan accepted');
+insert into decision_dim values (259787,147683,545929,'yes',247233,14,6,'loan accepted');
+insert into decision_dim values (280170,193895,537473,'yes',61804,7,6,'app expired');
+insert into decision_dim values (293663,157426,561385,'yes',75810,14,6,'app approved');
+insert into decision_dim values (225980,111092,560028,'pending',0,0,0,'app missing info');
+insert into decision_dim values (234379,196454,506059,'pending',0,0,0,'app missing info');
+insert into decision_dim values (227327,149194,515329,'yes',176182,10,3,'app expired');
+insert into decision_dim values (222700,197522,559800,'pending',0,0,0,'app received');
+insert into decision_dim values (298977,147162,503132,'no',0,0,0,'app decline');
+insert into decision_dim values (243024,110405,522396,'no',0,0,0,'app decline');
+insert into decision_dim values (238403,193650,578666,'yes',165961,12,3,'app approved');
+insert into decision_dim values (258759,152092,558025,'no',0,0,0,'app decline');
+insert into decision_dim values (245152,120789,560377,'pending',0,0,0,'app received');
+insert into decision_dim values (251913,116327,562006,'yes',186228,6,6,'app expired');
+insert into decision_dim values (271942,145245,562666,'yes',22383,4,6,'app approved');
+insert into decision_dim values (225920,161320,533992,'pending',0,0,0,'app received');
+insert into decision_dim values (290102,182374,585078,'yes',169772,1,12,'loan accepted');
+insert into decision_dim values (285825,146686,500025,'yes',142824,13,3,'loan accepted');
+insert into decision_dim values (219214,191093,538823,'pending',0,0,0,'app missing info');
+insert into decision_dim values (235414,158872,570219,'pending',0,0,0,'app received');
+insert into decision_dim values (207364,126428,519106,'yes',147240,4,18,'loan accepted');
+insert into decision_dim values (231105,123608,556927,'pending',0,0,0,'app missing info');
+insert into decision_dim values (288433,184355,551031,'yes',206708,3,3,'app expired');
+insert into decision_dim values (299782,144132,512262,'pending',0,0,0,'app received');
+insert into decision_dim values (236477,109854,597550,'yes',103405,8,9,'loan accepted');
+insert into decision_dim values (294186,141289,545603,'yes',172359,12,6,'app expired');
+insert into decision_dim values (237407,105314,537246,'yes',10448,13,3,'app approved');
+insert into decision_dim values (298577,136762,589618,'yes',173022,6,24,'loan accepted');
+insert into decision_dim values (237954,191215,568822,'yes',201199,2,9,'app expired');
+insert into decision_dim values (201448,160972,562593,'yes',88166,12,12,'app approved');
+insert into decision_dim values (297188,125096,533739,'yes',37370,5,9,'app expired');
+insert into decision_dim values (222400,160461,510371,'yes',32997,12,6,'app approved');
+insert into decision_dim values (248136,155265,583032,'yes',19067,3,24,'app approved');
+insert into decision_dim values (241947,189045,513932,'pending',0,0,0,'app missing info');
+insert into decision_dim values (275137,191095,509689,'no',0,0,0,'app decline');
+insert into decision_dim values (280844,173137,529653,'no',0,0,0,'app decline');
+insert into decision_dim values (228719,123577,540040,'yes',189463,3,12,'loan accepted');
+insert into decision_dim values (250441,165306,554685,'pending',0,0,0,'app missing info');
+insert into decision_dim values (228206,115850,570921,'pending',0,0,0,'app missing info');
+insert into decision_dim values (206611,180507,550691,'yes',121779,13,3,'loan accepted');
+insert into decision_dim values (261022,181605,592171,'yes',225390,1,24,'loan accepted');
+insert into decision_dim values (218043,176650,568815,'yes',116704,2,3,'app expired');
+insert into decision_dim values (273789,185994,537991,'pending',0,0,0,'app received');
+insert into decision_dim values (281290,145248,527598,'yes',73634,3,12,'app expired');
+insert into decision_dim values (247618,137689,593679,'pending',0,0,0,'app received');
+insert into decision_dim values (203063,178766,542234,'pending',0,0,0,'app missing info');
+insert into decision_dim values (214413,110745,538493,'yes',247823,12,6,'app approved');
+insert into decision_dim values (298933,124259,537091,'yes',49445,5,3,'app expired');
+insert into decision_dim values (210152,141666,528013,'yes',188605,7,3,'app approved');
+insert into decision_dim values (274249,179597,588711,'pending',0,0,0,'app received');
+insert into decision_dim values (202104,121931,553511,'pending',0,0,0,'app missing info');
+insert into decision_dim values (237997,193485,517037,'pending',0,0,0,'app received');
+insert into decision_dim values (226248,180927,519039,'yes',187823,8,9,'app expired');
+insert into decision_dim values (251500,137523,569553,'yes',61440,9,24,'loan accepted');
+insert into decision_dim values (275470,141789,593214,'yes',193800,7,12,'app approved');
+insert into decision_dim values (265846,170928,509292,'pending',0,0,0,'app missing info');
+insert into decision_dim values (299432,120804,514610,'pending',0,0,0,'app received');
+insert into decision_dim values (268375,164161,560575,'pending',0,0,0,'app missing info');
+insert into decision_dim values (267861,178434,585637,'pending',0,0,0,'app missing info');
+insert into decision_dim values (254570,147610,540939,'yes',195649,6,3,'loan accepted');
+insert into decision_dim values (207931,163493,574555,'pending',0,0,0,'app missing info');
+insert into decision_dim values (255940,136365,541993,'pending',0,0,0,'app missing info');
+insert into decision_dim values (262533,134841,507448,'yes',14649,2,18,'app expired');
+insert into decision_dim values (217363,167758,591633,'pending',0,0,0,'app missing info');
+insert into decision_dim values (297842,194103,588845,'yes',99007,2,12,'app expired');
+insert into decision_dim values (228510,152476,561761,'pending',0,0,0,'app missing info');
+insert into decision_dim values (273006,114037,536609,'yes',195670,4,6,'app expired');
+insert into decision_dim values (280907,191029,597183,'yes',101962,6,18,'app approved');
+insert into decision_dim values (295792,165555,565335,'yes',206362,12,24,'app expired');
+insert into decision_dim values (244010,136686,580348,'pending',0,0,0,'app received');
+insert into decision_dim values (215979,118688,528551,'yes',71756,11,24,'app approved');
+insert into decision_dim values (254469,134203,552717,'yes',241297,7,9,'app expired');
+insert into decision_dim values (237541,106618,576158,'no',0,0,0,'app decline');
+insert into decision_dim values (262280,196720,539497,'yes',159595,13,9,'loan accepted');
+insert into decision_dim values (275859,188698,518305,'yes',232031,5,6,'app approved');
+insert into decision_dim values (289085,123729,579302,'pending',0,0,0,'app received');
+insert into decision_dim values (294025,147151,532207,'yes',22312,8,9,'loan accepted');
+insert into decision_dim values (279890,180055,550996,'yes',166992,4,12,'loan accepted');
+insert into decision_dim values (211855,160323,561681,'yes',178298,3,9,'loan accepted');
+insert into decision_dim values (274781,185121,535363,'yes',114369,2,12,'app approved');
+insert into decision_dim values (255448,114766,516338,'yes',123307,13,9,'loan accepted');
+insert into decision_dim values (276144,146887,539625,'pending',0,0,0,'app received');
+insert into decision_dim values (237455,158621,573064,'pending',0,0,0,'app missing info');
+insert into decision_dim values (264708,161291,508371,'yes',249467,1,6,'app approved');
+insert into decision_dim values (229728,160121,545839,'pending',0,0,0,'app received');
+insert into decision_dim values (262815,133380,500197,'pending',0,0,0,'app missing info');
+insert into decision_dim values (228118,120103,515094,'pending',0,0,0,'app received');
+insert into decision_dim values (219210,194164,550067,'yes',242742,2,3,'app expired');
+insert into decision_dim values (264418,107441,505986,'yes',130425,1,24,'loan accepted');
+insert into decision_dim values (260638,149280,511109,'no',0,0,0,'app decline');
+insert into decision_dim values (269441,186099,571881,'pending',0,0,0,'app received');
+insert into decision_dim values (255660,106553,521095,'yes',172276,1,24,'loan accepted');
+insert into decision_dim values (211753,146515,516948,'yes',13185,13,3,'app approved');
+insert into decision_dim values (252019,161630,508824,'yes',27261,7,24,'loan accepted');
+
+--end decision_dim
+
+--INSERT DATA END
+
+--START PRIMARY KEY DEFINITION #ALTER TABLE
+
+--account_dim_pk
+alter table only account_dim
+    add constraint pk_account_dim primary key (account_id);
+
+--application_dim_pk
+alter table only application_dim
+    add constraint pk_application_dim primary key (application_id);
+
+--date_dim_pk
+alter table only date_dim
+    add constraint pk_date_dim primary key (date_id);
+
+--decision_dim_pk
+alter table only decision_dim
+    add constraint pk_decision_dim primary key (decision_id);
+
+--credit_dim_pk
+alter table only credit_dim
+    add constraint pk_credit_dim primary key (credit_review_id);
+
+--END PRIMARY KEY DEFINITION #ALTER TABLE
+
+--START FOREIGN KEY DEFINITION #ALTER TABLE
+
+--account_dim_fk
+alter table only account_dim 
+	Add constraint fk_account_dim foreign key (date_id) references date_dim;
+
+alter table only account_dim
+    add constraint tk_account_dim foreign key (application_id) references application_dim;
+
+--application_dim_fk
+alter table only application_dim
+    Add constraint fk_application_dim foreign key (date_id) references date_dim;
+
+
+alter table only application_dim
+    Add constraint tk_application_dim foreign key (account_id) references account_dim;
+
+--date_dim_fk there is no fk 
+
+--decision_dim_fk
+alter table only decision_dim
+    Add constraint fk_decision_dim foreign key (date_id) references date_dim;
+
+alter table only account_dim
+    Add constraint tk_decision_dim foreign key (application_id) references application_dim;
+
+--credit_dim_fk
+alter table only credit_dim
+    Add constraint fk_credit_dim foreign key (date_id) references date_dim;
+
+alter table only credit_dim
+    Add constraint tk_credit_dim foreign key (application_id) references application_dim;
+
+--END FOREIGN KEY DEFINITION #ALTER TABLE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
